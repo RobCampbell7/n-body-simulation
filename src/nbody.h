@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+
 typedef struct{
     double *pointX, *pointY, *pointZ;
     double *velX, *velY, *velZ;
@@ -8,8 +7,6 @@ typedef struct{
     int count;
 } Bodies;
 
-static double *allocateArray(int count, const char *name);
- 
 Bodies createBodies(int count);
 
 void freeBodies(Bodies *bodies);

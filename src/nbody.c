@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "nbody.h"
 
 static double *allocateArray(int count, const char *name) {
@@ -46,7 +47,7 @@ void freeBodies(Bodies *bodies) {
     bodies->count = 0;
 }
 
-double G = 6.674 * 10**-11
+double G = 6.674 * pow(10, -11);
 
 void computeAccelerations(Bodies *bodies, double softening) {
     double soft2 = softening * softening;
