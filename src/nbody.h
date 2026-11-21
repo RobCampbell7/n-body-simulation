@@ -9,6 +9,8 @@ typedef struct{
 
 Bodies createBodies(int count);
 
+Bodies readICfile(char* filename);
+
 void freeBodies(Bodies *bodies);
 
 void computeAccelerations(Bodies *bodies, double softening);

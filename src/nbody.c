@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "nbody.h"
 
 static double *allocateArray(int count, const char *name) {
@@ -89,4 +90,35 @@ void iterate(Bodies *bodies, double dt, double softening) {
         bodies->velY[i] += bodies->accY[i] * halfDt;
         bodies->velZ[i] += bodies->accZ[i] * halfDt;
     }
+}
+
+Bodies readICfile(char* filename) {
+    FILE *fpt = fopen(filename, "r");
+    if (!fpt) {
+        perror(filename);
+        exit(EXIT_FAILURE);
+    }
+    char magic[5];
+    int count;
+    if (fscanf(fpt, "%4s", magic) != 1 || strcmp(magic, "NBIC") != 0){
+        printf("Incorrect file provided\n");
+        perror(filename);
+        exit(EXIT_FAILURE);
+    }
+    if (fscanf(fpt, "%d", &count) != 1){
+        printf("Invalid count value\n");
+        perror(filename);
+        exit(EXIT_FAILURE);
+    }
+    Bodies bodies = createBodies(count);
+    for (int i = 0; i < count; i++) {
+        if (fscanf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf,%lf",
+                &bodies.pointX[i], &bodies.pointY[i], &bodies.pointZ[i],
+                &bodies.velX[i], &bodies.velY[i], &bodies.velZ[i],
+                &bodies.mass[i]) != 7) {
+            printf("Invalud value on row: %d\n", i);
+        }
+    }
+    fclose(fpt);
+    return bodies;
 }

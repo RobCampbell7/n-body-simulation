@@ -27,18 +27,23 @@ int main(){
 
     for (int i = 0; i < iterLimit; i++) {
         iterate(&bodies, 0.5, 0.01);
-        if (i % 100 == 0){
-            printf("%.2f, %.2f, %.2f\n", bodies.pointX[0], bodies.pointY[0], bodies.pointZ[0]);
-        }
     }
     freeBodies(&bodies);
     return 0;
 }
 
-void appendToFile(){
+void appendToFile(Bodies bodies){
     FILE *fpt;
     fpt = fopen(filename, "a");
-    fprintf(fpt, "hello world in a file\n");
+    if (!fpt) {
+        perror(filename);
+        exit(EXIT_FAILURE);
+    }
+    fprintf(fpt, "%lf,%lf,%lf", bodies.pointX[0], bodies.pointY[0], bodies.pointZ[0]);
+    for (int i=1; i<bodies.count; i++){
+        fprintf(fpt, ",%lf,%lf,%lf", bodies.pointX[i], bodies.pointY[i], bodies.pointZ[i]);
+    }
+    fprintf(fpt, "\n");
     fclose(fpt);
 }
 void emptyOutputFile(){
@@ -51,4 +56,3 @@ void emptyOutputFile(){
     //fprintf(fpt, "");
     fclose(fpt);
 }
-

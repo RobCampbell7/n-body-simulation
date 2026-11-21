@@ -76,7 +76,7 @@ if __name__ == "__main__":
     outFile = open(outputFilename, "w")
     outFile.write("NBIC\n")
     n = enterValidInt("How many particles? ", 2)
-    outputFile.write(str(n) + "\n")
+    outFile.write(str(n) + "\n")
     for i in range(1, 1 + n):
         p = Point(
             enterValidFloat(f"\nMass of particle {i} : ", 0),

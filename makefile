@@ -13,7 +13,7 @@ TARGET = $(BUILD_DIR)/nbody
 SANITIZERS = -fsanitize=address,undefined
 DEBUG_CFLAGS = -g -O0 -Wall -Wextra $(SANITIZERS)
 
-.PHONY: all debug run icRead clean
+.PHONY: all debug run clean
 
 # Default target: optimised build
 all: $(TARGET)
@@ -41,12 +41,6 @@ debug:
 run: all
 	mkdir -p output
 	cd $(BUILD_DIR) && ./nbody
-
-# Standalone initial conditions reader test
-icRead: $(BUILD_DIR)/icRead
-
-$(BUILD_DIR)/icRead: $(SRC_DIR)/icRead.c | $(BUILD_DIR)
-	$(CC) $(CFLAGS) $< -o $@
 
 clean:
 	rm -rf $(BUILD_DIR)
