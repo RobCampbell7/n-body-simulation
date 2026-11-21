@@ -71,7 +71,7 @@ def enterValidXYZ(prompt, separator = " ", m1=-inf, m2=inf):
                 print("Error of some kind, try again")
     return (x, y, z)
 
-outputFilename = "../src/initConditions.csv"
+outputFilename = "../initConditions/initConditions.csv"
 if __name__ == "__main__":
     outFile = open(outputFilename, "w")
     outFile.write("NBIC\n")

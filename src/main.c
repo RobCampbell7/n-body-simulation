@@ -2,29 +2,18 @@
 #include <stdlib.h>
 #include "nbody.h"
 
+const char* ICFILENAME = "../initConditions/initConditions.csv";
 const char* OUTFILENAME = "../output/bodies.csv";
 
 void writeToFile(FILE *fpt, double time, Bodies *bodies);
 
 int main(){
-    int count = 2;
     int iterLimit = 10000;
     int outputInterval = 100;
     double dt = 0.1;
     double softening = 0.01;
 
-    Bodies bodies = createBodies(count);
-
-    bodies.pointX[0] = 1;
-    bodies.pointY[0] = 1;
-    bodies.pointZ[0] = 1;
-    bodies.mass[0] = 1;
-    bodies.velX[0] = 0;
-
-    bodies.pointX[1] = 0;
-    bodies.pointY[1] = 0;
-    bodies.pointZ[1] = 0;
-    bodies.mass[1] = 100;
+    Bodies bodies = readICfile(ICFILENAME);
 
     FILE *fpt = fopen(OUTFILENAME, "w");
     if (!fpt){

@@ -92,7 +92,7 @@ void iterate(Bodies *bodies, double dt, double softening) {
     }
 }
 
-Bodies readICfile(char* filename) {
+Bodies readICfile(const char* filename) {
     FILE *fpt = fopen(filename, "r");
     if (!fpt) {
         perror(filename);

@@ -9,7 +9,7 @@ typedef struct{
 
 Bodies createBodies(int count);
 
-Bodies readICfile(char* filename);
+Bodies readICfile(const char* filename);
 
 void freeBodies(Bodies *bodies);
 
