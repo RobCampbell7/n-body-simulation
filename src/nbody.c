@@ -48,7 +48,7 @@ void freeBodies(Bodies *bodies) {
     bodies->count = 0;
 }
 
-double G = 6.674 * pow(10, -11);
+static const double G = 6.674e-11;
 
 void computeAccelerations(Bodies *bodies, double softening) {
     double soft2 = softening * softening;
@@ -101,13 +101,11 @@ Bodies readICfile(const char* filename) {
     char magic[5];
     int count;
     if (fscanf(fpt, "%4s", magic) != 1 || strcmp(magic, "NBIC") != 0){
-        printf("Incorrect file provided\n");
-        perror(filename);
+        fprintf(stderr, "%s: not an NBIC file\n", filename);
         exit(EXIT_FAILURE);
     }
-    if (fscanf(fpt, "%d", &count) != 1){
-        printf("Invalid count value\n");
-        perror(filename);
+    if (fscanf(fpt, "%d", &count) != 1 || count <= 0){
+        fprintf(stderr, "%s: invalid body count\n", filename);
         exit(EXIT_FAILURE);
     }
     Bodies bodies = createBodies(count);
@@ -116,9 +114,39 @@ Bodies readICfile(const char* filename) {
                 &bodies.pointX[i], &bodies.pointY[i], &bodies.pointZ[i],
                 &bodies.velX[i], &bodies.velY[i], &bodies.velZ[i],
                 &bodies.mass[i]) != 7) {
-            printf("Invalud value on row: %d\n", i);
+            fprintf(stderr, "%s: invalid values on body row %d\n", filename, i + 1);
+            exit(EXIT_FAILURE);
         }
     }
     fclose(fpt);
     return bodies;
+}
+
+double squareSum(double x, double y, double z){
+    return x*x + y*y + z*z;
+}
+
+double magnitude(double x, double y, double z){
+    return sqrt(squareSum(x, y, z));
+}
+
+double gravitationalPE(Bodies* bodies, double softening){
+    double sum = 0;
+    double dx, dy, dz;
+    double soft2 = softening*softening;
+   
+    for (int i=0; i<bodies->count; i++){
+        for (int j=i+1; j<bodies->count; j++){
+            dx = bodies->pointX[i] - bodies->pointX[j];
+            dy = bodies->pointY[i] - bodies->pointY[j];
+            dz = bodies->pointZ[i] - bodies->pointZ[j];
+            sum += bodies->mass[i] * bodies->mass[j] / sqrt(squareSum(dx, dy, dz) + soft2);
+        }
+    }
+
+    return -G * sum;
+}
+
+double kineticEnergy(int i, Bodies* bodies){
+    return 0.5 * bodies->mass[i] * squareSum(bodies->velX[i], bodies->velY[i], bodies->velZ[i]);
 }
